@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #define NB_STATES 17
 #define NB_ACTIONS 4
 #define R_LOOP 1
 #define R_HIT -10
-#define R_WIN 20
+#define R_WIN 999
 
 /**
  * (HAUT, BAS, GAUCHE, DROITE)
@@ -150,106 +151,106 @@ float T[NB_STATES][NB_ACTIONS][NB_STATES] = {
  // TODO : redefinir la stratégie de selon le modèle choisi 
 int R[NB_STATES][NB_ACTIONS][NB_STATES]={
     { // état 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 2
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 3
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 4
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 5
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 6
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 7
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 8
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 9
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 10
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 11
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 12
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 13
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 14
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 15
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }, 
     { // état 16
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     },
-    { // état 16
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, // action 1
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}, 
-        {{R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}}
+    { // état 17
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, // action 1
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}, 
+        {R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_LOOP, R_HIT, R_WIN}
     }
 };
 
@@ -263,24 +264,85 @@ float max(float *tab, int nbElt){
     return max;
 }
 
+float randomFloat()
+{
+      float r = (float)rand() / (float)RAND_MAX;
+      return r;
+}
+
+int findBest(int cell){
+    float best = Q[cell][0];
+    int a = 0;
+    for(int i = 1; i < NB_ACTIONS; i++){
+        if (best < Q[cell][i])
+        {
+            best = Q[cell][i];
+            a = i; 
+        }
+    }
+    return a;
+}
+
+int generateFakeMouvement(int currentCell,int action){
+    // Should return a new random state that should follow some logics
+    // i mean we dont care lmao
+    int next =  rand()%NB_STATES;
+    while (next == currentCell)
+    {
+        next = rand()%NB_STATES;
+    }
+    // Don't let him die too quickly
+    if (next == 15)
+    {
+        if(rand()%2 > 0 ){
+            return next;
+        }
+        next = rand()%NB_STATES;
+    }
+    return next;
+}
 
 int main(int argc, char const *argv[])
 {
-    for(int i = 0; i < 100; i++){
-        usleep(50000);
-        
-        for(int s = 0; s < NB_STATES; s++){
-            printf("\n");
-            for(int a = 0; a < NB_ACTIONS; a++){
-                float sum = 0;
-                for(int s = 0; s < NB_STATES; s++){
-                    //printf("T : %f | R : %d | Q : %f \n",T[s][a][s], R[s][a][s], max(Q[s], NB_ACTIONS));
-                    sum += T[s][a][s] * (R[s][a][s] + gamma * max(Q[s], NB_ACTIONS));
-                }
-                Q[s][a] = sum;
-            }
-        }
+    srand(time(NULL));
+    float learn = 0.15;
+    float exploration = 0.9;
 
+    // Pour chaque Episode
+    for(int i = 0; i < 300; i++){
+        int currentCell = rand()%(NB_STATES-2); // On autorise pas l'apparition dans la case FIN ou BLOQUé HBGD
+        int action=0;
+        int nextCell=0;   
+        // Combien de mouvement total fera en 1 episode
+        for (int i = 0; i < 1000; i++)
+        {
+            // Selection via epsilon greedy
+            if (randomFloat() >= exploration){
+                // Choose a random state
+                action = rand()%NB_ACTIONS;
+            }else{
+                // Choose the best action
+                action = findBest(currentCell);
+            }
+
+            // Ici le robot devra se deplacer selon action et nous retourner les nouvelles infos
+            // C'est la partie la plus compliqué il faut communiquer avec l'équipe Embedded
+            nextCell = generateFakeMouvement(currentCell,action);
+
+            int qval = T[currentCell][action][nextCell] * (R[currentCell][action][nextCell] + gamma * max(Q[nextCell], NB_ACTIONS));
+            Q[currentCell][action] = (1-learn)* Q[currentCell][action] + learn* qval;
+
+            currentCell = nextCell;
+            
+            // il arrive à la fin
+            if (currentCell == 16)
+            {
+                break;
+            }
+
+        }
+        learn = learn * 0.999;
+        exploration = exploration * 0.999;
         printf("Iteration: %d\n", i);
         for(int s = 0; s < NB_STATES; s++){
             printf("\n");
@@ -292,7 +354,6 @@ int main(int argc, char const *argv[])
                 printf("\n");
             }
         }
-
     } 
     printf("---------------------------------\n");  
     return 0;
