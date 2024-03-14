@@ -33,81 +33,53 @@ int randomPosition(Room room){
 // à voir sur les côté ce qui se passe 
 void generateTr(int nbState, int nbActions, float ***T, Room room){
     for(int curentstate = 0; curentstate < nbState; curentstate ++){
-        for(int action = 0; action < nbActions; action ++){
-            for(int nextstate = 0; nextstate < nbState; nextstate ++){
-                float res = 0;
-                switch (action)
-                {
-                case 0:
-                    if(nextstate == curentstate - room.nbCol){
-                        res = 0.5;
-                    }else{
-                        if(nextstate == (curentstate - room.nbCol + 1) || nextstate == (curentstate - room.nbCol -1)){
-                            res = 0.25;
-                        }
-                    }  
-                    break;
-                case 1:
-                    if(nextstate == curentstate + room.nbCol){
-                        res = 0.5;
-                    }else{
-                        if(nextstate == (curentstate + room.nbCol + 1) || nextstate == (curentstate + room.nbCol -1)){
-                            res = 0.25;
-                        }
-                    } 
-                    break;
-                case 2:
-                    if(nextstate == curentstate + 1){
-                        res = 0.5;
-                    }else{
-                        if(nextstate == (curentstate - room.nbCol + 1) || nextstate == (curentstate + room.nbCol + 1)){
-                            res = 0.25;
-                        }
-                    } 
-                    break;
-                
-                case 3:
-                     if(nextstate == curentstate - 1){
-                        res = 0.5;
-                    }else{
-                        if(nextstate == (curentstate - room.nbCol - 1) || nextstate == (curentstate + room.nbCol - 1)){
-                            res = 0.25;
-                        }
-                    } 
-                    break;
+        for(int nextstate = 0; nextstate < nbState; nextstate ++){
+            float res = 0;
+            int action = 0;
+            if(nextstate == curentstate - room.nbCol){
+                    res = 0.5;
+            }else{
+                    if(nextstate == (curentstate - room.nbCol + 1) || nextstate == (curentstate - room.nbCol -1)){
+                        res = 0.25;
+                    }
+            } 
+            T[curentstate][action][nextstate] = res;
 
-                default:
-                    break;
-                }
-                T[curentstate][action][nextstate] = res;
-                
+            action = 1;
+            res = 0;
+            if(nextstate == curentstate + room.nbCol){
+                    res = 0.5;
+            }else{
+                    if(nextstate == (curentstate + room.nbCol + 1) || nextstate == (curentstate + room.nbCol -1)){
+                        res = 0.25;
+                    }
+            } 
+            T[curentstate][action][nextstate] = res;
+
+
+            action = 2;
+            res = 0;
+                if(nextstate == curentstate + 1){
+                    res = 0.5;
+            }else{
+                    if(nextstate == (curentstate - room.nbCol + 1) || nextstate == (curentstate + room.nbCol + 1)){
+                        res = 0.25;
+                    }
+            } 
+            T[curentstate][action][nextstate] = res;
+
+
+            action = 3;
+            res = 0;
+            if(nextstate == curentstate - 1){
+                    res = 0.5;
+            }else{
+                    if(nextstate == (curentstate - room.nbCol - 1) || nextstate == (curentstate + room.nbCol - 1)){
+                        res = 0.25;
+                    }
             }
-        }
-        
-        // correction à certains cas particulier sur les côtés 
-        if( 0 < curentstate < room.nbCol){
-            // STRAIGHT 
-            T[curentstate][0][curentstate] = 0.5;
-            T[curentstate][0][curentstate+1] = 0.25;
-            T[curentstate][0][curentstate + room.nbCol+1] = 0.25;
+            T[curentstate][action][nextstate] = res;
 
-            // RIGHT / est 
-            T[curentstate][2][curentstate] = 0.25;
-
-            // LEFT / ouest
-            T[curentstate][3][curentstate] = 0.25;
-        }else{
-            if( nbState - room.nbCol < curentstate < nbState){
-                // SOUTH
-                T[curentstate][1][curentstate] = 0.5;
-                T[curentstate][1][curentstate+1] = 0.25;
-                T[curentstate][1][curentstate - 1] = 0.25;
-
-                T[curentstate][2][curentstate] = 0.25;
-
-                // LEFT / ouest
-                T[curentstate][3][curentstate] = 0.25;
-            }
         }
     }
 
