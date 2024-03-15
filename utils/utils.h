@@ -8,11 +8,15 @@
 #define DIM_CELL 30 // in centimeters 
 #define DIM_VECT 34 // 16(N) + 16(S) + 1(E) + 1(W) 
 
+typedef struct{
+    int nbState;
+    int wall;
+}State;
 
 typedef struct {
     int nbCol;
     int nbLig;
-    int **mat; // contenu de la case (numéro de la case)
+    State **mat; // contenu de la case (numéro de la case)
 }Room;
 
 typedef struct {
