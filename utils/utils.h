@@ -16,6 +16,7 @@ typedef struct{
 typedef struct {
     int nbCol;
     int nbLig;
+    int nbStats;
     State **mat; // contenu de la case (numéro de la case)
 }Room;
 
@@ -29,8 +30,8 @@ typedef struct {
 Room allocMemoireRoom(int height, int width);
 int randomPosition(Room room);
 float ***allocMemoireT(int nbStates, int nbActions);
-void affichageT(float ***T, int nbstates, int nbactions);
-void generateTr(int nbState, int nbActions, float ***T, Room room);
+void affichageT(float ***T, Room room, int nbactions);
+void generateTr(int nbActions, float ***T, Room room);
 
 
 #endif
