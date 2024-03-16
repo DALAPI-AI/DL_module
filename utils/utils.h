@@ -7,6 +7,8 @@
 
 #define DIM_CELL 30 // in centimeters 
 #define DIM_VECT 34 // 16(N) + 16(S) + 1(E) + 1(W) 
+#define MAIN_PROBALITY 0.50f
+#define EDGE_PROBALITY 0.25f
 
 
 #define R_HIT -1

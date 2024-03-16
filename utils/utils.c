@@ -30,7 +30,40 @@ int randomPosition(Room room){
     return pos;
 }
 
-void generateTr(int nbActions, float ***T, Room room, int finalState){
+
+/* Check if the state is on the column like
+    [A][B][C][D]
+    [E][F][G][H]
+    [I][J][K][L]
+    A,E,I,D,H,L return true
+*/
+int isOnColumn(int numState, int nbColumn){
+    return (((numState%nbColumn) == 0) || ((numState%nbColumn) == (nbColumn-1)));
+}
+
+/* Check if the state is on the row like
+    [A][B][C][D]
+    [E][F][G][H]
+    [I][J][K][L]
+    A,B,C,D,I,J,K,L return true
+*/
+int isOnRow(int numState, int nbRow, int totalColumn){
+    return ((numState < totalColumn) || (numState >= (nbRow*(totalColumn-1))));
+}
+
+void applyProbability(int currentState, float*** T,int action,int edge1State, int mainState, int edge2State){
+    T[currentState][action][edge1State] = EDGE_PROBALITY;
+    T[currentState][action][mainState] = MAIN_PROBALITY;
+    T[currentState][action][edge2State] = EDGE_PROBALITY;
+}
+
+void applyCornerProbability(int currentState, float*** T,int action,int edge1State, int mainState){
+    T[currentState][action][edge1State] = EDGE_PROBALITY;
+    T[currentState][action][mainState] = MAIN_PROBALITY + EDGE_PROBALITY;
+}
+
+// à voir sur les côté ce qui se passe 
+void generateTr(int nbActions, float ***T, Room room){
 
     for(int s = 0; s < room.nbStats; s ++){
         for(int a = 0; a < nbActions; a ++){
@@ -40,165 +73,116 @@ void generateTr(int nbActions, float ***T, Room room, int finalState){
         }
     }
 
-    for(int curentstate = 0; curentstate < room.nbStats; curentstate ++){
-        if(curentstate == 0 || curentstate == room.nbCol-1){
-            
-            T[curentstate][0][curentstate] = 0.75;
-            T[curentstate][1][curentstate + room.nbCol] = 0.5;
-            T[curentstate][1][curentstate] = 0.25;
-
-        if(curentstate != finalState){
-            if(curentstate == 0){
-                T[curentstate][0][curentstate + 1] = 0.25;
-                T[curentstate][1][curentstate + room.nbCol + 1] = 0.25;
-                T[curentstate][2][curentstate + 1] = 0.5;
-                T[curentstate][2][curentstate] = 0.25;
-                T[curentstate][2][curentstate + room.nbCol + 1] = 0.25;
-                T[curentstate][3][curentstate] = 0.75;
-                T[curentstate][3][curentstate + room.nbCol] = 0.25;
-                
-            }else{
-                T[curentstate][0][curentstate - 1] = 0.25;
-                T[curentstate][1][curentstate + room.nbCol - 1] = 0.25;
-                T[curentstate][2][curentstate] = 0.75;
-                T[curentstate][2][curentstate + room.nbCol] = 0.25;
-                T[curentstate][3][curentstate - 1] = 0.5;
-                T[curentstate][3][curentstate] = 0.25;
-                T[curentstate][3][curentstate + room.nbCol - 1] = 0.25;
-            } 
-        }else{
-            if(curentstate == (room.nbLig-1)*room.nbCol || curentstate == room.nbStats -1){
-                T[curentstate][0][curentstate] = 0.25;
-                T[curentstate][0][curentstate - room.nbCol] = 0.5;
-                T[curentstate][1][curentstate] = 0.75;
-
-                if(curentstate == (room.nbLig-1)*room.nbCol){
-                    T[curentstate][0][curentstate - room.nbCol + 1] = 0.25;
-                    T[curentstate][1][curentstate + 1] = 0.25;
-                    T[curentstate][2][curentstate + 1] = 0.5;
-                    T[curentstate][2][curentstate] = 0.25;
-                    T[curentstate][2][curentstate - room.nbCol + 1] = 0.25;
-                    T[curentstate][3][curentstate] = 0.75;
-                    T[curentstate][3][curentstate - room.nbCol] = 0.25;
-
-                }else{
-                    T[curentstate][0][curentstate - room.nbCol - 1] = 0.25;
-                    T[curentstate][1][curentstate - 1] = 0.25;
-                    T[curentstate][2][curentstate] = 0.75;
-                    T[curentstate][2][curentstate - room.nbCol] = 0.25;
-                    T[curentstate][3][curentstate - 1] = 0.5;
-                    T[curentstate][3][curentstate] = 0.25;
-                    T[curentstate][3][curentstate - room.nbCol - 1] = 0.25;
-                }
-            }
-            else{
-                if(curentstate < room.nbCol - 1){
-                    int action = 0;
-                    T[curentstate][action][curentstate] = 0.5;
-                    T[curentstate][action][curentstate + 1] = 0.25;
-                    T[curentstate][action][curentstate - 1] = 0.25;
-                    action = 1;
-                    T[curentstate][action][curentstate + room.nbCol] = 0.5;
-                    T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                    T[curentstate][action][curentstate + room.nbCol - 1] = 0.25;
-                    action = 2;
-                    T[curentstate][action][curentstate + 1] = 0.5;
-                    T[curentstate][action][curentstate] = 0.25;
-                    T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                    action = 3;
-                    T[curentstate][action][curentstate - 1] = 0.5;
-                    T[curentstate][action][curentstate] = 0.25;
-                    T[curentstate][action][curentstate + room.nbCol - 1] = 0.25;
-
-                }else{
-                    if(curentstate%room.nbCol == 0){
-                            int action = 0;
-                            T[curentstate][action][curentstate] = 0.25;
-                            T[curentstate][action][curentstate -room.nbCol] = 0.5;
-                            T[curentstate][action][curentstate -room.nbCol + 1] = 0.25;
-                            action = 1;
-                            T[curentstate][action][curentstate + room.nbCol] = 0.5;
-                            T[curentstate][action][curentstate] = 0.25;
-                            T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                            action = 2;
-                            T[curentstate][action][curentstate + 1] = 0.5;
-                            T[curentstate][action][curentstate -room.nbCol + 1] = 0.25;
-                            T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                            action = 3;
-                            T[curentstate][action][curentstate - room.nbCol] = 0.25;
-                            T[curentstate][action][curentstate] = 0.5;
-                            T[curentstate][action][curentstate + room.nbCol ] = 0.25;
-                    }else{
-                            if((curentstate+1)%room.nbCol == 0){
-                                int action = 0;
-                                T[curentstate][action][curentstate - room.nbCol] = 0.5;
-                                T[curentstate][action][curentstate] = 0.25;
-                                T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                                action = 1;
-                                T[curentstate][action][curentstate] = 0.25;
-                                T[curentstate][action][curentstate + room.nbCol] = 0.5;
-                                T[curentstate][action][curentstate +room.nbCol - 1] = 0.25;
-                                action = 2;
-                                T[curentstate][action][curentstate] = 0.5;
-                                T[curentstate][action][curentstate + room.nbCol] = 0.25;
-                                T[curentstate][action][curentstate - room.nbCol] = 0.25;
-                                action = 3;
-                                T[curentstate][action][curentstate - 1] = 0.5;
-                                T[curentstate][action][curentstate + room.nbCol -1] = 0.25;
-                                T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                            }else{
-                                if((room.nbLig-1)*room.nbCol < curentstate && curentstate < room.nbStats - 1 ){
-                                    int action = 0;
-                                    T[curentstate][action][curentstate - room.nbCol] = 0.5;
-                                    T[curentstate][action][curentstate - room.nbCol + 1] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                                    action = 1;
-                                    T[curentstate][action][curentstate] = 0.5;
-                                    T[curentstate][action][curentstate + 1] = 0.25;
-                                    T[curentstate][action][curentstate - 1] = 0.25;
-                                    action = 2;
-                                    T[curentstate][action][curentstate + 1] = 0.5;
-                                    T[curentstate][action][curentstate] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol + 1] = 0.25;
-                                    action = 3;
-                                    T[curentstate][action][curentstate - 1] = 0.5;
-                                    T[curentstate][action][curentstate] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                                }else{
-                                    int action = 0;
-                                    T[curentstate][action][curentstate - room.nbCol] = 0.5;
-                                    T[curentstate][action][curentstate - room.nbCol + 1] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                                    action = 1;
-                                    T[curentstate][action][curentstate + room.nbCol] = 0.5;
-                                    T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                                    T[curentstate][action][curentstate + room.nbCol - 1] = 0.25;
-                                    action = 2;
-                                    T[curentstate][action][curentstate + 1] = 0.5;
-                                    T[curentstate][action][curentstate + room.nbCol + 1] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol + 1 ] = 0.25;
-                                    action = 3;
-                                    T[curentstate][action][curentstate - 1] = 0.5;
-                                    T[curentstate][action][curentstate + room.nbCol - 1] = 0.25;
-                                    T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
-                                }
-                            }
-                    
-                        }
-                    }
-                }
-
-        }
+    // 0 UP, 1 DOWN , 2 RIGHT, 3 LEFT
+    for (int currentState = 0; currentState < room.nbStats; currentState++){
+        int UpLeft = currentState - 1 - room.nbCol;
+        int Up = currentState - room.nbCol;
+        int UpRight = currentState + 1 - room.nbCol;
+        int Left = currentState - 1;
+        int Right = currentState + 1;
+        int DownLeft = currentState - 1 + room.nbCol;
+        int Down = currentState + room.nbCol;
+        int DownRight = currentState + 1 + room.nbCol;
         
+        // suppose we are in the middle where each movement is possible
+        if ((!isOnRow(currentState,room.nbLig,room.nbCol)) && (!isOnColumn(currentState,room.nbCol))){
+            applyProbability(currentState,T,0,UpLeft,Up,UpRight);
+            applyProbability(currentState,T,1,DownLeft,Down,DownRight);
+            applyProbability(currentState,T,2,UpLeft,Left,DownLeft);
+            applyProbability(currentState,T,3,UpRight,Right,DownRight);
+        }else{
+            // We are either at the first line or last line but not on the left or right wall
+            if ((isOnRow(currentState,room.nbLig,room.nbCol)) && (!isOnColumn(currentState,room.nbCol)))
+            {
+                switch (currentState < room.nbLig)
+                {
+                    // we are on the first line no L/R wall
+                case 1:
+                    applyProbability(currentState,T,0,Left,currentState,Right);
+                    applyProbability(currentState,T,1,DownLeft,Down,DownRight);
+                    applyProbability(currentState,T,2,currentState,Right,DownRight);
+                    applyProbability(currentState,T,3,currentState,Left,DownLeft);
+                    break;
+                    // we are on the last line no L/R wall
+                default:
+                    applyProbability(currentState,T,0,UpLeft,Up,UpRight);
+                    applyProbability(currentState,T,1,Left,currentState,Right);
+                    applyProbability(currentState,T,2,currentState,Right,UpRight);
+                    applyProbability(currentState,T,3,currentState,Left,UpLeft);
+                    break;
+                }
+                continue;
+            }
+
+            // Now we are the first column or last column but not on the up or down wall
+            if ((!isOnRow(currentState,room.nbLig,room.nbCol)) && (isOnColumn(currentState,room.nbCol)))
+            {
+                switch (currentState%room.nbCol == 0)
+                {
+                    // we are on the first column no U/D wall
+                case 1:
+                    applyProbability(currentState,T,0,currentState,Up,UpRight);
+                    applyProbability(currentState,T,1,currentState,Down,DownRight);
+                    applyProbability(currentState,T,2,UpRight,Right,DownRight);
+                    applyProbability(currentState,T,3,Up,currentState,Down);
+                    break;
+                    // we are on the last column no U/D wall
+                default:
+                    applyProbability(currentState,T,0,UpLeft,Up,currentState);
+                    applyProbability(currentState,T,1,DownLeft,Down,currentState);
+                    applyProbability(currentState,T,2,Up,currentState,Down);
+                    applyProbability(currentState,T,3,UpLeft,Left,DownLeft);
+                    break;
+                }
+                continue;
+            }
+        
+            // Let work on the remaining corner
+            // Upper left corner
+            if (currentState == 0)
+            {
+                applyCornerProbability(currentState,T,0,Right,currentState);
+                applyProbability(currentState,T,1,currentState,Down,DownRight);
+                applyProbability(currentState,T,2,currentState,Right,DownRight);
+                applyCornerProbability(currentState,T,3,Down,currentState);
+                continue;
+            }
+            // Upper right corner
+            if (currentState == room.nbCol)
+            {
+                applyCornerProbability(currentState,T,0,Left,currentState);
+                applyProbability(currentState,T,1,currentState,Down,DownLeft);
+                applyCornerProbability(currentState,T,2,Down,currentState);
+                applyProbability(currentState,T,3,currentState,Left,DownLeft);
+                continue;
+            }
+            // Lower left corner
+            if (currentState%room.nbCol == 0)
+            {
+                applyProbability(currentState,T,0,currentState,Up,UpRight);
+                applyCornerProbability(currentState,T,1,Right,currentState);
+                applyProbability(currentState,T,2,currentState,Right,UpRight);
+                applyCornerProbability(currentState,T,3,Up,currentState);
+                continue;
+            }
+            // Lower right corner
+            applyProbability(currentState,T,0,currentState,Up,UpLeft);
+            applyCornerProbability(currentState,T,1,Left,currentState);
+            applyCornerProbability(currentState,T,2,Up,currentState);
+            applyProbability(currentState,T,3,currentState,Left,UpLeft);
         }
     }
+
 }
 
+
+
 void affichageT(float ***T, Room room, int nbactions){
+    char* actionName[4] = {"Up","Down","Right","Left"};
     for(int s = 0; s < room.nbStats; s ++){
-        printf("{\n");
+        printf("{ State %d\n",s);
         for(int a = 0; a < nbactions; a ++){
-            printf("\t{ ");
+            printf("\t{ Action %s",actionName[a]);
             for(int sf = 0; sf < room.nbStats; sf ++){
                 if(sf%room.nbCol == 0){
                     printf("\n\t");
