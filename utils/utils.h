@@ -29,9 +29,9 @@ typedef struct {
 // functions 
 Room allocMemoireRoom(int height, int width);
 int randomPosition(Room room);
-float ***allocMemoireT(int nbStates, int nbActions);
+float ***allocMemoire3DimTab(int nbStates, int nbActions);
 void affichageT(float ***T, Room room, int nbactions);
 void generateTr(int nbActions, float ***T, Room room);
-
+float **allocMemoireQ(int nbActions, int nbStates);
 
 #endif

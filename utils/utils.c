@@ -31,7 +31,6 @@ int randomPosition(Room room){
     return pos;
 }
 
-// à voir sur les côté ce qui se passe 
 void generateTr(int nbActions, float ***T, Room room){
 
     for(int s = 0; s < room.nbStats; s ++){
@@ -194,8 +193,6 @@ void generateTr(int nbActions, float ***T, Room room){
     }
 }
 
-
-
 void affichageT(float ***T, Room room, int nbactions){
     for(int s = 0; s < room.nbStats; s ++){
         printf("{\n");
@@ -213,7 +210,7 @@ void affichageT(float ***T, Room room, int nbactions){
     }
 }
 
-float ***allocMemoireT(int nbStates, int nbActions){
+float ***allocMemoire3DimTab(int nbStates, int nbActions){
     float ***t = (float ***)malloc(nbStates * sizeof(float **));
     if(t == NULL){
         printf("Erreur d'allocation mémoire \n");
@@ -233,8 +230,38 @@ float ***allocMemoireT(int nbStates, int nbActions){
             }
         }
     }
+    for(int s = 0; s < nbStates; s++){
+        for(int a = 0; a < nbActions; a++){
+            for(int sf = 0; sf < nbStates; sf++){
+                t[s][a][sf] = 0; 
+            }
+        }
+    }
+
     return t;
 }
+
+float **allocMemoireQ(int nbActions, int nbStates){
+    float **Q = (float**)malloc(nbStates * sizeof(float*));
+    if(Q == NULL){
+        printf("Erreur d'allocation mémoire !\n");
+        exit(1);
+    }
+    for(int s = 0; s < nbStates; s ++){
+        Q[s] = (float*)malloc(nbActions * sizeof(float));
+        if(Q[s] == NULL){
+            printf("Erreur d'allocation mémoire !\n");
+            exit(1);
+        }
+    }
+    for(int s = 0; s < nbStates; s++){
+        for(int a = 0; a < nbActions; a++){
+            Q[s][a] = 0;
+        }
+    }
+    return Q;
+}
+
 
 
 int main(int argc, char const *argv[])
@@ -244,9 +271,11 @@ int main(int argc, char const *argv[])
     int width = 120;
     Room room = allocMemoireRoom(height,width);
     printf(" nbcol = %d, nblig = %d \n", room.nbCol, room.nbLig);
-    float ***T = allocMemoireT(room.nbStats, nbactions);
+    float ***T = allocMemoire3DimTab(room.nbStats, nbactions);
     generateTr(nbactions, T, room);
     affichageT(T, room, nbactions);
+
+    float ***R = allocMemoire3DimTab(room.nbStats, nbactions);
     return 0;
 }
 
