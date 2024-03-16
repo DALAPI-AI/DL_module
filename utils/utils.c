@@ -22,7 +22,6 @@ Room allocMemoireRoom(int height, int width){
     return room;
 }
 
-
 int randomPosition(Room room){
     srand(time(NULL));
     int col = rand()%(room.nbCol);
@@ -31,7 +30,7 @@ int randomPosition(Room room){
     return pos;
 }
 
-void generateTr(int nbActions, float ***T, Room room){
+void generateTr(int nbActions, float ***T, Room room, int finalState){
 
     for(int s = 0; s < room.nbStats; s ++){
         for(int a = 0; a < nbActions; a ++){
@@ -48,6 +47,7 @@ void generateTr(int nbActions, float ***T, Room room){
             T[curentstate][1][curentstate + room.nbCol] = 0.5;
             T[curentstate][1][curentstate] = 0.25;
 
+        if(curentstate != finalState){
             if(curentstate == 0){
                 T[curentstate][0][curentstate + 1] = 0.25;
                 T[curentstate][1][curentstate + room.nbCol + 1] = 0.25;
@@ -165,7 +165,6 @@ void generateTr(int nbActions, float ***T, Room room){
                                     T[curentstate][action][curentstate] = 0.25;
                                     T[curentstate][action][curentstate - room.nbCol - 1] = 0.25;
                                 }else{
-                                    printf("autes \n ");
                                     int action = 0;
                                     T[curentstate][action][curentstate - room.nbCol] = 0.5;
                                     T[curentstate][action][curentstate - room.nbCol + 1] = 0.25;
@@ -186,9 +185,11 @@ void generateTr(int nbActions, float ***T, Room room){
                             }
                     
                         }
-                }
+                    }
                 }
 
+        }
+        
         }
     }
 }
@@ -262,9 +263,56 @@ float **allocMemoireQ(int nbActions, int nbStates){
     return Q;
 }
 
+void generateR(int nbActions, float ***R, Room room, int succState){
+    for(int s = 0; s < room.nbStats; s++){
+        for(int a = 0; a < nbActions; a++){
+            R[s][a][s] = R_HIT;
+            R[s][a][succState] = R_WIN;
 
+        }
+        if(s == 0){
+            R[s][0][s+1] = R_HIT;
+            R[s][3][s + room.nbCol] = R_HIT;
+        }else{
+            if(s == (room.nbCol -1)){
+                R[s][0][s-1] = R_HIT;
+                R[s][2][s + room.nbCol] = R_HIT;
+            }else{
+                if(s == ((room.nbLig-1)*room.nbCol)){
+                    R[s][1][s+1] = R_HIT;
+                    R[s][3][s - room.nbCol] = R_HIT;
+                }else{
+                    if(s == (room.nbStats -1)){
+                        R[s][1][s-1] = R_HIT;
+                        R[s][2][s-room.nbCol] = R_HIT;
+                    }else{
+                        if(s > 0 && s < (room.nbCol -1)){
+                            R[s][0][s+1] = R_HIT;
+                            R[s][0][s-1] = R_HIT;
+                        }else{
+                            if(s > ((room.nbLig-1)*room.nbCol) && s < (room.nbStats -1)){
+                                R[s][1][s+1] = R_HIT;
+                                R[s][1][s-1] = R_HIT;
+                            }else{
+                                if(s%(room.nbCol)==0){
+                                   R[s][3][s - room.nbCol] = R_HIT; 
+                                   R[s][3][s + room.nbCol] = R_HIT;
+                                }else{
+                                    if((s+1)%room.nbCol==0){
+                                        R[s][2][s - room.nbCol] = R_HIT; 
+                                        R[s][2][s + room.nbCol] = R_HIT;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 { 
     int nbactions = 4;
     int height = 120;
@@ -273,12 +321,15 @@ int main(int argc, char const *argv[])
     printf(" nbcol = %d, nblig = %d \n", room.nbCol, room.nbLig);
     float ***T = allocMemoire3DimTab(room.nbStats, nbactions);
     generateTr(nbactions, T, room);
-    affichageT(T, room, nbactions);
+    //affichageT(T, room, nbactions);
 
     float ***R = allocMemoire3DimTab(room.nbStats, nbactions);
+    generateR(nbactions, R, room, 2);
+
+    affichageT(R, room, nbactions);
     return 0;
 }
 
-
+*/
 
 
