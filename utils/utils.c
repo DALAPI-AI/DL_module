@@ -63,7 +63,7 @@ void applyCornerProbability(int currentState, float*** T,int action,int edge1Sta
 }
 
 // à voir sur les côté ce qui se passe 
-void generateTr(int nbActions, float ***T, Room room){
+void generateTr(int nbActions, float ***T, Room room, int finalState){
 
     for(int s = 0; s < room.nbStats; s ++){
         for(int a = 0; a < nbActions; a ++){
@@ -83,6 +83,11 @@ void generateTr(int nbActions, float ***T, Room room){
         int DownLeft = currentState - 1 + room.nbCol;
         int Down = currentState + room.nbCol;
         int DownRight = currentState + 1 + room.nbCol;
+        
+        if (currentState == finalState)
+        {
+            continue;
+        }
         
         // suppose we are in the middle where each movement is possible
         if ((!isOnRow(currentState,room.nbLig,room.nbCol)) && (!isOnColumn(currentState,room.nbCol))){
