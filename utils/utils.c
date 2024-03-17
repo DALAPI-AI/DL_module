@@ -254,39 +254,49 @@ float **allocMemoireQ(int nbActions, int nbStates){
 
 void generateR(int nbActions, float ***R, Room room, int succState){
     for(int s = 0; s < room.nbStats; s++){
+        // if we don't move after an action it is bad, if we manage to go to final state it is a win
         for(int a = 0; a < nbActions; a++){
             R[s][a][s] = R_HIT;
             R[s][a][succState] = R_WIN;
-
         }
+
+        // Upper left corner
         if(s == 0){
             R[s][0][s+1] = R_HIT;
             R[s][3][s + room.nbCol] = R_HIT;
         }else{
+            // Upper right corner
             if(s == (room.nbCol -1)){
                 R[s][0][s-1] = R_HIT;
                 R[s][2][s + room.nbCol] = R_HIT;
             }else{
+                // Lower left corner
                 if(s == ((room.nbLig-1)*room.nbCol)){
                     R[s][1][s+1] = R_HIT;
                     R[s][3][s - room.nbCol] = R_HIT;
                 }else{
+                    // Lower right corner
                     if(s == (room.nbStats -1)){
                         R[s][1][s-1] = R_HIT;
                         R[s][2][s-room.nbCol] = R_HIT;
                     }else{
+                        // No corner at this point
+                        // Upper wall 
                         if(s > 0 && s < (room.nbCol -1)){
                             R[s][0][s+1] = R_HIT;
                             R[s][0][s-1] = R_HIT;
                         }else{
+                            // Lower wall 
                             if(s > ((room.nbLig-1)*room.nbCol) && s < (room.nbStats -1)){
                                 R[s][1][s+1] = R_HIT;
                                 R[s][1][s-1] = R_HIT;
                             }else{
+                                // Left wall 
                                 if(s%(room.nbCol)==0){
                                    R[s][3][s - room.nbCol] = R_HIT; 
                                    R[s][3][s + room.nbCol] = R_HIT;
                                 }else{
+                                    // Right wall 
                                     if((s+1)%room.nbCol==0){
                                         R[s][2][s - room.nbCol] = R_HIT; 
                                         R[s][2][s + room.nbCol] = R_HIT;

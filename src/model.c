@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
 
     int height = 120;
     int width = 120;
-    int finalState = 2;
+    int finalState = 2*6;
     Room room = allocMemoireRoom(height, width);
 
     float ***T = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
@@ -60,13 +60,14 @@ int main(int argc, char const *argv[])
         for(int s = 0; s < room.nbStats; s++){
             for(int a = 0; a < NB_ACTIONS; a++){
                 float sum = 0;
-                for(int s = 0; s < room.nbStats; s++){
-                    sum += T[s][a][s] * (R[s][a][s] + g * max(Q[s], NB_ACTIONS));
+                for(int sf = 0; sf < room.nbStats; sf++){
+                    sum += T[s][a][sf] * (R[s][a][sf] + g * max(Q[sf], NB_ACTIONS));
                 }
                 Q[s][a] = sum;
             }
         }
-
+        /*
+        if(i%10)continue;
         printf("Iteration: %d\n", i);
         for(int s = 0; s < room.nbStats; s++){
             printf("\n");
@@ -78,15 +79,16 @@ int main(int argc, char const *argv[])
                 printf("\n");
             }
         }
+        */
 
     } 
     printf("---------------------------------\n");  
     printf("-----------------Result------------------ \n");
     for(int s = 0; s < room.nbStats; s++){
+        printf("%d ,",indexMax(Q[s], NB_ACTIONS));
         if((s+1)%room.nbCol == 0){
             printf("\n");
         }
-        printf("%d ,",indexMax(Q[s], NB_ACTIONS));
     }
     printf("---------------------------------\n");
     
