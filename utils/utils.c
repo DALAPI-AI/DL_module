@@ -51,18 +51,18 @@ int isOnRow(int numState, int nbRow, int totalColumn){
     return ((numState < totalColumn) || (numState >= (nbRow*(totalColumn-1))));
 }
 
-void applyProbability(int currentState, float*** T,int action,int edge1State, int mainState, int edge2State){
+void applyProba(int currentState, float*** T,int action,int edge1State, int mainState, int edge2State){
     T[currentState][action][edge1State] = EDGE_PROBALITY;
     T[currentState][action][mainState] = MAIN_PROBALITY;
-    T[currentState][action][edge2State] = EDGE_PROBALITY;
+    T[currentState][action][edge2State] = EDGE_PROBALITY;          
 }
 
-void applyCornerProbability(int currentState, float*** T,int action,int edge1State, int mainState){
+void applyCornerProba(int currentState, float*** T,int action,int edge1State, int mainState){
     T[currentState][action][edge1State] = EDGE_PROBALITY;
-    T[currentState][action][mainState] = MAIN_PROBALITY + EDGE_PROBALITY;
+    T[currentState][action][mainState] = MAIN_PROBALITY + EDGE_PROBALITY;  
 }
 
-// à voir sur les côté ce qui se passe 
+
 void generateTr(int nbActions, float ***T, Room room, int finalState){
 
     for(int s = 0; s < room.nbStats; s ++){
@@ -91,10 +91,10 @@ void generateTr(int nbActions, float ***T, Room room, int finalState){
         
         // suppose we are in the middle where each movement is possible
         if ((!isOnRow(currentState,room.nbLig,room.nbCol)) && (!isOnColumn(currentState,room.nbCol))){
-            applyProbability(currentState,T,0,UpLeft,Up,UpRight);
-            applyProbability(currentState,T,1,DownLeft,Down,DownRight);
-            applyProbability(currentState,T,2,UpLeft,Left,DownLeft);
-            applyProbability(currentState,T,3,UpRight,Right,DownRight);
+            applyProba(currentState,T,0,UpLeft,Up,UpRight);
+            applyProba(currentState,T,1,DownLeft,Down,DownRight);
+            applyProba(currentState,T,3,UpLeft,Left,DownLeft);
+            applyProba(currentState,T,2,UpRight,Right,DownRight);
         }else{
             // We are either at the first line or last line but not on the left or right wall
             if ((isOnRow(currentState,room.nbLig,room.nbCol)) && (!isOnColumn(currentState,room.nbCol)))
@@ -103,17 +103,17 @@ void generateTr(int nbActions, float ***T, Room room, int finalState){
                 {
                     // we are on the first line no L/R wall
                 case 1:
-                    applyProbability(currentState,T,0,Left,currentState,Right);
-                    applyProbability(currentState,T,1,DownLeft,Down,DownRight);
-                    applyProbability(currentState,T,2,currentState,Right,DownRight);
-                    applyProbability(currentState,T,3,currentState,Left,DownLeft);
+                    applyProba(currentState,T,0,Left,currentState,Right);
+                    applyProba(currentState,T,1,DownLeft,Down,DownRight);
+                    applyProba(currentState,T,2,currentState,Right,DownRight);
+                    applyProba(currentState,T,3,currentState,Left,DownLeft);
                     break;
                     // we are on the last line no L/R wall
                 default:
-                    applyProbability(currentState,T,0,UpLeft,Up,UpRight);
-                    applyProbability(currentState,T,1,Left,currentState,Right);
-                    applyProbability(currentState,T,2,currentState,Right,UpRight);
-                    applyProbability(currentState,T,3,currentState,Left,UpLeft);
+                    applyProba(currentState,T,0,UpLeft,Up,UpRight);
+                    applyProba(currentState,T,1,Left,currentState,Right);
+                    applyProba(currentState,T,2,currentState,Right,UpRight);
+                    applyProba(currentState,T,3,currentState,Left,UpLeft);
                     break;
                 }
                 continue;
@@ -126,17 +126,17 @@ void generateTr(int nbActions, float ***T, Room room, int finalState){
                 {
                     // we are on the first column no U/D wall
                 case 1:
-                    applyProbability(currentState,T,0,currentState,Up,UpRight);
-                    applyProbability(currentState,T,1,currentState,Down,DownRight);
-                    applyProbability(currentState,T,2,UpRight,Right,DownRight);
-                    applyProbability(currentState,T,3,Up,currentState,Down);
+                    applyProba(currentState,T,0,currentState,Up,UpRight);
+                    applyProba(currentState,T,1,currentState,Down,DownRight);
+                    applyProba(currentState,T,2,UpRight,Right,DownRight);
+                    applyProba(currentState,T,3,Up,currentState,Down);
                     break;
                     // we are on the last column no U/D wall
                 default:
-                    applyProbability(currentState,T,0,UpLeft,Up,currentState);
-                    applyProbability(currentState,T,1,DownLeft,Down,currentState);
-                    applyProbability(currentState,T,2,Up,currentState,Down);
-                    applyProbability(currentState,T,3,UpLeft,Left,DownLeft);
+                    applyProba(currentState,T,0,UpLeft,Up,currentState);
+                    applyProba(currentState,T,1,DownLeft,Down,currentState);
+                    applyProba(currentState,T,2,Up,currentState,Down);
+                    applyProba(currentState,T,3,UpLeft,Left,DownLeft);
                     break;
                 }
                 continue;
@@ -146,40 +146,39 @@ void generateTr(int nbActions, float ***T, Room room, int finalState){
             // Upper left corner
             if (currentState == 0)
             {
-                applyCornerProbability(currentState,T,0,Right,currentState);
-                applyProbability(currentState,T,1,currentState,Down,DownRight);
-                applyProbability(currentState,T,2,currentState,Right,DownRight);
-                applyCornerProbability(currentState,T,3,Down,currentState);
+                applyCornerProba(currentState,T,0,Right,currentState);
+                applyProba(currentState,T,1,currentState,Down,DownRight);
+                applyProba(currentState,T,2,currentState,Right,DownRight);
+                applyCornerProba(currentState,T,3,Down,currentState);
                 continue;
             }
             // Upper right corner
-            if (currentState == room.nbCol)
+            if (currentState == (room.nbCol - 1))
             {
-                applyCornerProbability(currentState,T,0,Left,currentState);
-                applyProbability(currentState,T,1,currentState,Down,DownLeft);
-                applyCornerProbability(currentState,T,2,Down,currentState);
-                applyProbability(currentState,T,3,currentState,Left,DownLeft);
+                applyCornerProba(currentState,T,0,Left,currentState);
+                applyProba(currentState,T,1,currentState,Down,DownLeft);
+                applyCornerProba(currentState,T,2,Down,currentState);
+                applyProba(currentState,T,3,currentState,Left,DownLeft);
                 continue;
             }
             // Lower left corner
             if (currentState%room.nbCol == 0)
             {
-                applyProbability(currentState,T,0,currentState,Up,UpRight);
-                applyCornerProbability(currentState,T,1,Right,currentState);
-                applyProbability(currentState,T,2,currentState,Right,UpRight);
-                applyCornerProbability(currentState,T,3,Up,currentState);
+                applyProba(currentState,T,0,currentState,Up,UpRight);
+                applyCornerProba(currentState,T,1,Right,currentState);
+                applyProba(currentState,T,2,currentState,Right,UpRight);
+                applyCornerProba(currentState,T,3,Up,currentState);
                 continue;
             }
             // Lower right corner
-            applyProbability(currentState,T,0,currentState,Up,UpLeft);
-            applyCornerProbability(currentState,T,1,Left,currentState);
-            applyCornerProbability(currentState,T,2,Up,currentState);
-            applyProbability(currentState,T,3,currentState,Left,UpLeft);
+            applyProba(currentState,T,0,currentState,Up,UpLeft);
+            applyCornerProba(currentState,T,1,Left,currentState);
+            applyCornerProba(currentState,T,2,Up,currentState);
+            applyProba(currentState,T,3,currentState,Left,UpLeft);
         }
     }
 
 }
-
 
 
 void affichageT(float ***T, Room room, int nbactions){
@@ -252,12 +251,28 @@ float **allocMemoireQ(int nbActions, int nbStates){
     return Q;
 }
 
+int closerToSuccState(int state, int fstate, int succState, Room room){
+    int state_line = state/room.nbCol;
+    int state_col = state%room.nbCol;
+
+    int fstate_line = fstate/room.nbCol;
+    int fstate_col = fstate%room.nbCol;
+
+    int succState_line = succState/room.nbCol;
+    int succState_col = succState%room.nbCol;
+
+    float d_state = sqrt(pow((succState_line - state_line), 2) + pow((succState_col - state_col), 2)); 
+    float f_state = sqrt(pow((succState_line - fstate_line), 2) + pow((succState_col - fstate_col), 2));
+
+    return f_state < d_state; 
+}
+
 void generateR(int nbActions, float ***R, Room room, int succState){
     for(int s = 0; s < room.nbStats; s++){
         // if we don't move after an action it is bad, if we manage to go to final state it is a win
         for(int a = 0; a < nbActions; a++){
             R[s][a][s] = R_HIT;
-            R[s][a][succState] = R_WIN;
+            R[s][a][succState] = R_WIN;   
         }
 
         // Upper left corner
@@ -310,8 +325,8 @@ void generateR(int nbActions, float ***R, Room room, int succState){
         }
     }
 }
-
-/*int main(int argc, char const *argv[])
+/*
+int main(int argc, char const *argv[])
 { 
     int nbactions = 4;
     int height = 120;
@@ -319,16 +334,16 @@ void generateR(int nbActions, float ***R, Room room, int succState){
     Room room = allocMemoireRoom(height,width);
     printf(" nbcol = %d, nblig = %d \n", room.nbCol, room.nbLig);
     float ***T = allocMemoire3DimTab(room.nbStats, nbactions);
-    generateTr(nbactions, T, room);
-    //affichageT(T, room, nbactions);
+    generateTr(nbactions, T, room , 2);
+    affichageT(T, room, nbactions);
 
     float ***R = allocMemoire3DimTab(room.nbStats, nbactions);
     generateR(nbactions, R, room, 2);
 
-    affichageT(R, room, nbactions);
+    //affichageT(R, room, nbactions);
     return 0;
 }
-
 */
+
 
 

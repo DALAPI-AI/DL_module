@@ -5,7 +5,6 @@
 #define R_LOOP 1
 
 
-
 int actions[NB_ACTIONS] = {
     0b00, // STRAIGHT
     0b01, // BACK 
@@ -41,18 +40,18 @@ int main(int argc, char const *argv[])
 {
     srand(time(NULL));
 
-    int height = 120;
-    int width = 120;
-    int finalState = 2*6;
+    int height = 180;
+    int width = 180;
+    int finalState = 22;
     Room room = allocMemoireRoom(height, width);
 
     float ***T = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
-    generateTr(NB_ACTIONS, T, room, finalState);
-    affichageT(T, room, NB_ACTIONS);
-
+    float ***R = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
     float **Q = allocMemoireQ(NB_ACTIONS, room.nbStats);
 
-    float ***R = allocMemoire3DimTab(room.nbStats, NB_ACTIONS); 
+    generateTr(NB_ACTIONS, T, room, finalState);
+    affichageT(T, room, NB_ACTIONS);
+    
     generateR(NB_ACTIONS, R, room, finalState);
     affichageT(R, room, NB_ACTIONS);
 
@@ -66,9 +65,9 @@ int main(int argc, char const *argv[])
                 Q[s][a] = sum;
             }
         }
-        /*
+        
         if(i%10)continue;
-        printf("Iteration: %d\n", i);
+        /*printf("Iteration: %d\n", i);
         for(int s = 0; s < room.nbStats; s++){
             printf("\n");
             for(int a = 0; a < NB_ACTIONS; a++){
@@ -78,11 +77,11 @@ int main(int argc, char const *argv[])
                 }
                 printf("\n");
             }
-        }
-        */
+        }*/
+        
 
     } 
-    printf("---------------------------------\n");  
+    
     printf("-----------------Result------------------ \n");
     for(int s = 0; s < room.nbStats; s++){
         printf("%d ,",indexMax(Q[s], NB_ACTIONS));
@@ -95,14 +94,4 @@ int main(int argc, char const *argv[])
     
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
