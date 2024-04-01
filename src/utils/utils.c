@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "utils/utils.h"
 
 Room allocMemoireRoom(int height, int width){
     int nbCol = width/DIM_CELL;

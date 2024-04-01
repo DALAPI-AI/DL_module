@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "../utils/utils.h"
+#include "utils/utils.h"
 
 #define NB_ACTIONS 4
 #define R_LOOP 1
