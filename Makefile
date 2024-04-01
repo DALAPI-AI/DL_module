@@ -15,7 +15,7 @@ INCLUDE_DIR = ./include
 OBJ_DIR = ./bin
 OBJ_DELIMITER = /
 
-all: test
+all: dalapi_AI
 
 utils.o: $(SRC_DIR)/utils/utils.c
 	$(MKDIR) $(OBJ_DIR)
@@ -25,8 +25,8 @@ model.o: $(SRC_DIR)/model.c
 	$(MKDIR) $(OBJ_DIR)
 	$(CC) $(FLAG) -c $< -o $(OBJ_DIR)$(OBJ_DELIMITER)$@
 
-test: model.o utils.o
-	$(CC) $(wildcard $(OBJ_DIR)/*.o) -lm -o test
+dalapi_AI: model.o utils.o
+	$(CC) $(wildcard $(OBJ_DIR)/*.o) -lm -o dalapi_AI
 
 clean:
-	$(RM) $(OBJ_DIR)$(OBJ_DELIMITER)*.o *.a *.gch test
+	$(RM) $(OBJ_DIR)$(OBJ_DELIMITER)*.o *.a *.gch dalapi_AI
