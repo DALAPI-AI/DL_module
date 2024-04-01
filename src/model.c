@@ -1,5 +1,7 @@
 #include <unistd.h>
 #include "utils/utils.h"
+#include "utils/file.h"
+#include "process/imageProcessing.h"
 
 #define NB_ACTIONS 4
 #define R_LOOP 1
@@ -90,8 +92,58 @@ int main(int argc, char const *argv[])
         }
     }
     printf("---------------------------------\n");
-    
-    
+
+    VecteurImg sampleVectors[] = {
+        {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120}},
+        {{130, 140, 150, 160, 170, 180, 190, 200, 10, 20, 30, 40}},
+        {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}}
+    };
+    int nbElt = 3;
+
+    if (saveVector(sampleVectors,nbElt ,"vectors.txt") != 0) {
+        printf("Error saving vector.\n");
+        return 1;
+    }
+
+    printf("Affichage de tous les vecteurs:\n");
+    VecteurImg* loadedVector = (VecteurImg*) malloc(nbElt*sizeof(VecteurImg));
+    if (loadVector(loadedVector, &nbElt,"vectors.txt") != 0) {
+        printf("Error loading vector.\n");
+        return 1;
+    }
+    for (int i = 0; i < nbElt; i++) {
+        for (int j = 0; j < 12; j++) {
+            printf("%u ", loadedVector[i].array[j]);
+        }
+        printf("\n");
+    }
+    VecteurImg newVector = {{250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360}};
+    printf("Ajout d'un vecteur :\n");
+    if (appendVector(newVector, "vectors.txt") != 0) {
+        printf("Error appending vector.\n");
+        return 1;
+    }
+
+    printf("Suppression du vecteur numero 2 (1 en algo)\n");
+    if (deleteVector(1, "vectors.txt") != 0) {
+        printf("Error deleting vector.\n");
+        return 1;
+    }
+
+    printf("Affichage des vecteurs apres suppression:\n");
+    FILE *file = fopen("vectors.txt", "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        printf("%s", line);
+    }
+    fclose(file);
+
+    free(loadedVector);
     return 0;
 }
 
