@@ -20,4 +20,8 @@ unsigned int getEast(VecteurImg vect);
 /// @brief Retourne la valeur du boussole
 unsigned int getBoussole(VecteurImg vect);
 
+float calculateNorthMean(VecteurImg vectImg);
+void normalizeVec(VecteurImg vect);
+float calculateSimilarity(VecteurImg vec1, VecteurImg vec2);
+
 #endif // IMAGE_PROCESS_H

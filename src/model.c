@@ -42,9 +42,9 @@ int main(int argc, char const *argv[])
 {
     srand(time(NULL));
 
-    int height = 180;
-    int width = 180;
-    int finalState = 22;
+    int height = 3*180;
+    int width = 3*180;
+    int finalState = 3*18;
     Room room = allocMemoireRoom(height, width);
 
     float ***T = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
@@ -52,10 +52,10 @@ int main(int argc, char const *argv[])
     float **Q = allocMemoireQ(NB_ACTIONS, room.nbStats);
 
     generateTr(NB_ACTIONS, T, room, finalState);
-    affichageT(T, room, NB_ACTIONS);
+    // affichageT(T, room, NB_ACTIONS);
     
     generateR(NB_ACTIONS, R, room, finalState);
-    affichageT(R, room, NB_ACTIONS);
+    // affichageT(R, room, NB_ACTIONS);
 
     for(int i = 0; i < 100; i++){    
         for(int s = 0; s < room.nbStats; s++){
@@ -86,20 +86,25 @@ int main(int argc, char const *argv[])
     
     printf("-----------------Result------------------ \n");
     for(int s = 0; s < room.nbStats; s++){
-        printf("%d ,",indexMax(Q[s], NB_ACTIONS));
+        if ( s== finalState){
+            printf("F ,");
+        }else{
+            printf("%d ,",indexMax(Q[s], NB_ACTIONS));
+
+        }
         if((s+1)%room.nbCol == 0){
             printf("\n");
         }
     }
     printf("---------------------------------\n");
-
     VecteurImg sampleVectors[] = {
         {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120}},
-        {{130, 140, 150, 160, 170, 180, 190, 200, 10, 20, 30, 40}},
+        {{130, 140, 150, 160, 200, 180, 130, 110, 10, 20, 30, 40}},
         {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}}
     };
     int nbElt = 3;
-
+    printf("Moyenne distance h' : %f\n",calculateNorthMean(sampleVectors[1]));
+    /*
     if (saveVector(sampleVectors,nbElt ,"vectors.txt") != 0) {
         printf("Error saving vector.\n");
         return 1;
@@ -144,6 +149,7 @@ int main(int argc, char const *argv[])
     fclose(file);
 
     free(loadedVector);
+    */
     return 0;
 }
 

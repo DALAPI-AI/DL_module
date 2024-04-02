@@ -12,7 +12,7 @@ CC = gcc
 FLAG = -g -Wall -I./include
 SRC_DIR = ./src
 INCLUDE_DIR = ./include
-OBJ_DIR = ./bin
+OBJ_DIR = bin
 OBJ_DELIMITER = /
 
 all: dalapi_AI
