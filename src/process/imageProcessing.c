@@ -6,7 +6,7 @@
 #define AMOUNT_NORTH 8
 #define NB_INDEXES 4
 #define PI (4 * atan(1))
-#define B_RANGE 8  
+#define B_RANGE 4 
 #define DECAL_MARG  DIM_CELL/3 // marge de décalage pour la génération de vecteur  
 
 /**
@@ -54,7 +54,7 @@ unsigned int getEast(VecteurImg vect){
 }
 
 /**
- * @brief Extrait la valeur de la boussole {0-7}
+ * @brief Extrait la valeur de la boussole {0-4}
  * @param vect vecteur position 
  * @return orientation de la boussole  
 */
@@ -181,14 +181,14 @@ void translateVect(VecteurImg vect, int* indexes){
         south = 1;
         west = 2;
         break;
-    case 4:
+    case 1:
         printf("#### robot orienté vers le <SUD> \n");
         north = 2;
         est = 3;
         south = 0;
         west = 1;
         break;
-    case 6:
+    case 3:
         printf("#### robot orientéé vers <OUEST> \n");
         north = 1;
         est = 2;
@@ -275,13 +275,10 @@ int generateBoussole(){
  * @return un vecteur contenant les distances des capteurs 
 */
 VecteurImg generateRandomVector(Room room){
-    srand( time( NULL ) );
     int line = generateLig(room.nbLig); // vrai ligne 
     int col = generateCol(room.nbCol); // vrai colonne 
     int boussole = generateBoussole();
 
-    // retirer les cas de rééquilibrage
-    if(boussole%2 == 1) boussole--;
 
     printf("Etat choisi : ligne => %d, colonne => %d, boussole => %d\n", line, col, boussole);
 
@@ -303,14 +300,14 @@ VecteurImg generateRandomVector(Room room){
         estCel = room.nbLig - line - 1;
         westCel = line;
         break;
-    case 4:
+    case 1:
         northCel = room.nbLig - line - 1;
         westCel = room.nbCol - col - 1;
         southCel = line;
         estCel = col;
         break;
 
-    case 6:
+    case 3:
         northCel = col;
         westCel = room.nbLig - line - 1;
         estCel = line;
@@ -348,4 +345,230 @@ void afficherVect(VecteurImg vect){
     printf("\n Distance Sud : %d ",getSouth(vect));
     printf("\n Distance Ouest : %d ", getWest(vect));
     printf("\n Boussole : %d \n", getBoussole(vect));
+}
+
+int isOnNorthCorner(int state, Room room){
+    return state/room.nbCol == 0;
+}
+
+int isOnSouthCorner(int state, Room room){
+    return state/room.nbCol == room.nbLig - 1;
+}
+
+int isOnRightCorner(int state, Room room){
+    return state%room.nbCol == room.nbCol - 1;
+}
+
+int isOnLeftCorner(int state, Room room){
+    return state%room.nbCol == 0;
+}
+
+int nextBoussoleVal(int action){
+    return action;
+}
+
+void generateNextState(VecteurImg *vect, int state, int action, Room room){
+    int dx = 0;
+    int dy = 0;
+    int error = rand()%10;
+    int step_error = rand()%(DIM_CELL/2);
+    int direction[3] = {0, 1, -1};
+    int random_direction = rand()%2;
+    int randDir = direction[random_direction];
+    switch (action)
+    {
+    case 0:
+        dy = -STEP + error;
+        if(isOnLeftCorner(state, room)){
+            randDir = 1;
+        }else{
+            if(isOnRightCorner(state, room)){
+                randDir = -1;
+            }
+        }
+        dx = step_error*randDir;
+       
+        break;
+    case 1:
+        dy = STEP + error;
+        if(isOnLeftCorner(state, room)){
+            randDir = 1;
+        }else{
+            if(isOnRightCorner(state, room)){
+                randDir = -1;
+            }
+        }
+        dx = step_error*randDir;
+        break;
+    case 2:
+        dx = STEP + error;
+        if(isOnNorthCorner(state, room)){
+            randDir = 1;
+        }else{
+            if(isOnSouthCorner(state, room)){
+                randDir = -1;
+            }
+        }
+        dy = step_error*randDir;
+        break;
+    case 3:
+        dx = -STEP + error;
+        if(isOnLeftCorner(state, room)){
+            randDir = 1;
+        }else{
+            if(isOnRightCorner(state, room)){
+                randDir = -1;
+            }
+        }
+        dy = step_error*randDir;
+        break;
+    default:
+        break;
+    }
+
+    int northStep = 0;
+    int southStep = 0;
+    int estStep = 0;
+    int westStep = 0;
+
+    rotateVect(vect, nextBoussoleVal(action));
+    switch (getBoussole(*vect))
+    {
+    case 0:
+        northStep = dy;
+        southStep = -dy;
+        estStep = -dx;
+        westStep = dx;
+        break;
+    case 1:
+        northStep = -dy;
+        southStep = dy;
+        westStep = -dx;
+        estStep = dx;
+        break;
+    case 2:
+        westStep = dy;
+        estStep = -dy;
+        northStep = -dx;
+        southStep = dx;
+        break;
+    case 3:
+        westStep = -dy;
+        estStep = dy;
+        northStep = dx;
+        southStep = -dx;
+        break;
+    default:
+        break;
+    }
+
+    // TODO faire la translation avec la rotation d'abord 
+     printf("north step => %d, southStep => %d, estStep => %d, westStep => %d \n",northStep, southStep, estStep, westStep);
+    for(int i = 0; i < AMOUNT_NORTH; i++){
+        vect->array[i] += northStep + rand()%10;
+    }
+   
+    vect->array[8] += estStep;
+    vect->array[9] += southStep;
+    vect->array[10] += westStep;
+
+}
+
+int getNbRotation(int boussole, int newBoussole){
+    int nbrot = 0;
+    switch (boussole)
+    {
+    case 0:
+        switch (newBoussole)
+        {
+        case 2:
+            nbrot = 1;
+            break;
+        case 1:
+            nbrot = 2;
+            break;
+        case 3:
+            nbrot = 3;
+            break;
+        default:
+            break;
+        }
+        break;
+    case 1:
+        switch (newBoussole)
+        {
+        case 2:
+            nbrot = 3;
+            break;
+        case 0:
+            nbrot = 2;
+            break;
+        case 3:
+            nbrot = 1;
+            break;
+        default:
+            break;
+        }
+        break;
+    case 2:
+        switch (newBoussole)
+        {
+        case 1:
+            nbrot = 1;
+            break;
+        case 3:
+            nbrot = 2;
+            break;
+        case 0:
+            nbrot = 3;
+            break;
+        default:
+            break;
+        }
+        break;
+    case 3:
+        switch (newBoussole)
+        {
+        case 0:
+            nbrot = 1;
+            break;
+        case 2:
+            nbrot = 2;
+            break;
+        case 1:
+            nbrot = 3;
+            break;
+        default:
+            break;
+        }
+        break; 
+    default:
+        break;
+    }
+    
+    return nbrot;
+}
+
+void rotateVect(VecteurImg *vect, int newBoussole){
+    int distances[4] = {calculateNorthMean(*vect), getEast(*vect), getSouth(*vect), getWest(*vect)};
+    int newdistances[4];
+    for(int i = 0; i < 4; i++){
+        int index = (i + getNbRotation(getBoussole(*vect), newBoussole))%4;
+        newdistances[i] = distances[index];
+    }
+
+    float totalAngleRange = 2 * PI/3;
+    float step = totalAngleRange / (AMOUNT_NORTH - 1);
+    float startAngle = PI/6; // 30°
+    float currentA;
+    // calcul des 8 mesures du premier capteur + une erreur de 10cm 
+    for (int i = 0; i < AMOUNT_NORTH; i++) {
+        currentA = startAngle + (i * step);
+        vect->array[i] = getHypo(currentA, newdistances[0]) + rand()%10;
+    }
+
+    vect->array[8] = newdistances[1];
+    vect->array[9] = newdistances[2];
+    vect->array[10] = newdistances[3];
+    vect->array[11] = newBoussole;
 }

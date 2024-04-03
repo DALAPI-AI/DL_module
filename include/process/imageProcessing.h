@@ -3,7 +3,7 @@
 
 #include "utils/utils.h"
 
-#define DIM_VECT 12 
+#define DIM_VECT 12
 
 /**
  * @brief Cette structure contiendra les informations reçues par la Raspberry via la communication Serial
@@ -36,5 +36,8 @@ unsigned int* randomNorthDistance(int nbCel);
 int getState(VecteurImg vect, Room room );
 VecteurImg generateRandomVector(Room room);
 void afficherVect(VecteurImg vect);
+void generateNextState(VecteurImg *vect, int state, int action, Room room);
+void rotateVect(VecteurImg *vect, int newBoussole);
+int getNbRotation(int boussole, int newBoussole);
 
 #endif // IMAGE_PROCESS_H

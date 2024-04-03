@@ -5,11 +5,15 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 
-#define DIM_CELL 30 // in centimeters 
+#define DIM_CELL 30 // in centimeters
+#define STEP 30 
 
 #define MAIN_PROBALITY 0.50f
 #define EDGE_PROBALITY 0.25f
+#define NB_ACTIONS 4
+#define R_LOOP 1
 
 
 #define R_HIT -5
@@ -37,5 +41,8 @@ int closerToSuccState(int state, int fstate, int succState, Room room);
 void generateTr(int nbActions, float ***T, Room room, int finalState);
 float **allocMemoireQ(int nbActions, int nbStates);
 void generateR(int nbActions, float ***R, Room room, int succState);
+float **learningModel(int height, int width, int finalState, int epoch, float g);
+int indexMax(float *tab, int nbElt);
+float max(float *tab, int nbElt);
 
 #endif

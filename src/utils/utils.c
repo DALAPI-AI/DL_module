@@ -325,25 +325,56 @@ void generateR(int nbActions, float ***R, Room room, int succState){
         }
     }
 }
-/*
-int main(int argc, char const *argv[])
-{ 
-    int nbactions = 4;
-    int height = 120;
-    int width = 120;
-    Room room = allocMemoireRoom(height,width);
-    printf(" nbcol = %d, nblig = %d \n", room.nbCol, room.nbLig);
-    float ***T = allocMemoire3DimTab(room.nbStats, nbactions);
-    generateTr(nbactions, T, room , 2);
-    affichageT(T, room, nbactions);
 
-    float ***R = allocMemoire3DimTab(room.nbStats, nbactions);
-    generateR(nbactions, R, room, 2);
+float **learningModel(int height, int width, int finalState, int epoch, float g){
+    Room room = allocMemoireRoom(height, width);
 
-    //affichageT(R, room, nbactions);
-    return 0;
+    float ***T = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
+    float ***R = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
+    float **Q = allocMemoireQ(NB_ACTIONS, room.nbStats);
+
+    generateTr(NB_ACTIONS, T, room, finalState);
+    
+    generateR(NB_ACTIONS, R, room, finalState);
+
+    for(int i = 0; i < epoch ; i++){    
+        for(int s = 0; s < room.nbStats; s++){
+            for(int a = 0; a < NB_ACTIONS; a++){
+                float sum = 0;
+                for(int sf = 0; sf < room.nbStats; sf++){
+                    sum += T[s][a][sf] * (R[s][a][sf] + g * max(Q[sf], NB_ACTIONS));
+                }
+                Q[s][a] = sum;
+            }
+        }
+        
+        if(i%10)continue;
+
+    } 
+    return Q;
 }
-*/
 
+
+float max(float *tab, int nbElt){
+    float max = tab[0];
+    for(int i = 1; i < nbElt; i++){
+        if(max < tab[i]){
+            max = tab[i];
+        }
+    }
+    return max;
+}
+
+int indexMax(float *tab, int nbElt){
+    int index = 0; 
+    float max = tab[0];
+    for(int i = 1; i < nbElt; i++){
+        if(max < tab[i]){
+            max = tab[i];
+            index = i;
+        }
+    }
+    return index;
+}
 
 
