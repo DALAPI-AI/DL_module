@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "utils/file.h"
 
-int saveVector(VecteurImg* vect,int nbVect, char* fileName){
+int saveVector(VecteurImg* vect,int* state,int nbVect, char* fileName){
     FILE *file = fopen(fileName, "w");
 
     if (file == NULL) {
@@ -19,13 +19,13 @@ int saveVector(VecteurImg* vect,int nbVect, char* fileName){
                 fprintf(file, ",");
             }
         }
-        fprintf(file, "\n");
+        fprintf(file, ",%d\n",state[j]);
     }
 
     fclose(file);
     return 0;   
 }
-int loadVector(VecteurImg* vect, int* nbVect, char* fileName){
+int loadVector(VecteurImg* vect,int* state ,int* nbVect, char* fileName){
     FILE *file = fopen(fileName, "r");
 
     if (file == NULL) {
@@ -41,13 +41,13 @@ int loadVector(VecteurImg* vect, int* nbVect, char* fileName){
             vect[*nbVect].array[i] = atoi(token);
             token = strtok(NULL, ",");
         }
+        state[*nbVect] = atoi(token);
         (*nbVect)++;
     }
-
     fclose(file);
     return 0;
 }
-int appendVector(VecteurImg vect, char* fileName){
+int appendVector(VecteurImg vect,int state ,char* fileName){
     FILE *file = fopen(fileName, "a");
 
     if (file == NULL) {
@@ -61,7 +61,7 @@ int appendVector(VecteurImg vect, char* fileName){
             fprintf(file, ",");
         }
     }
-    fprintf(file, "\n");
+    fprintf(file, ",%d\n", state);
 
     fclose(file);
     return 0;
