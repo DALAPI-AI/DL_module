@@ -1,3 +1,11 @@
+/**
+ * @file comm.h
+ * @author Dania OULKADI
+ * @author Laurent LIN
+ * @author Pierre FRANCK-PAPUCHON
+ * @author Alicia BERROUANE
+ * @brief Gère la communication entre la Raspberry et Arduino
+ */
 #ifdef __linux__
 #ifndef COMM_H
 #define COMM_H

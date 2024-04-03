@@ -1,3 +1,11 @@
+/**
+ * @file imageProcessing.h
+ * @author Dania OULKADI
+ * @author Laurent LIN
+ * @author Pierre FRANCK-PAPUCHON
+ * @author Alicia BERROUANE
+ * @brief Gère la reconnaissance d'image à partir d'un vecteur
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

@@ -45,5 +45,7 @@ endif
 file.o : $(SRC_DIR)/utils/file.c $(INCLUDE_DIR)/process/imageProcessing.h
 	$(CC) $(FLAG) -c $< -o $(OBJ_DIR)$(OBJ_DELIMITER)$@
 
+doc : 
+	doxygen Doxyfile
 clean:
 	$(RM) $(OBJ_DIR)$(OBJ_DELIMITER)*.o *.a *.gch dalapi_AI

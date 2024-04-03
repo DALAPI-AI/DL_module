@@ -1,3 +1,11 @@
+/**
+ * @file file.h
+ * @author Dania OULKADI
+ * @author Laurent LIN
+ * @author Pierre FRANCK-PAPUCHON
+ * @author Alicia BERROUANE
+ * @brief Gère l'écriture et la lecture des vecteurs dans un fichier txt
+ */
 #ifndef FILE_H
 #define FILE_H
 #include "process/imageProcessing.h"

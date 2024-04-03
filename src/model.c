@@ -64,16 +64,11 @@ int main(int argc, char const *argv[])
     char message[] = "{119:72:61:44:49:60:81:127:0:23:10:3}";
     VecteurImg test = getVectorFromArduino(message);
     afficherVect(test);
-     printf("#######################################################################\n");
-    /*
-     VecteurImg sampleVectors[] = {
-        {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 1}},
-        {{130, 140, 150, 160, 200, 180, 130, 110, 10, 20, 30, 40}},
-        {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}}
-    };
-    int nbElt = 3;
+    printf("#######################################################################\n");
+    
 
-    if (saveVector(sampleVectors,nbElt ,"vectors.txt") != 0) {
+    int numEtat[3]= {2,5,6};
+    if (saveVector(sampleVectors,numEtat,nbElt ,"vectors.txt") != 0) {
         printf("Error saving vector.\n");
         return 1;
     }
