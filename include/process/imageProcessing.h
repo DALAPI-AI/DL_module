@@ -34,8 +34,8 @@ unsigned int getEast(VecteurImg vect);
 unsigned int getBoussole(VecteurImg vect);
 
 float calculateNorthMean(VecteurImg vectImg);
-void normalizeVec(VecteurImg vect);
-float calculateSimilarity(VecteurImg vec1, VecteurImg vec2);
+float jaccard_similarity(unsigned int set1[], unsigned int set2[], int size1, int size2);
+int calculateSimilarity(VecteurImg* array, int nbElt, VecteurImg vec2);
 
 int *getIndexes(VecteurImg vect);
 int getIndex(int distance);

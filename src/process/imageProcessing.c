@@ -16,7 +16,8 @@
 #define PI (4 * atan(1))
 #define B_RANGE 4 
 #define DECAL_MARG  DIM_CELL/3 // marge de décalage pour la génération de vecteur  
-
+#define MIN_THRESHOLD 0.80f // similarité minimum 80%
+#define TOLERANCE 3 // à +/- 3 de valeur
 /**
  * @brief Extrait les distances du premier capteur (north)
  * @param vect vecteur position renvoyé par l'arduino
@@ -248,12 +249,40 @@ int getState(VecteurImg vect, Room room){
     return state;
 }
 
-void normalizeVec(VecteurImg vect){
 
+float jaccard_similarity(unsigned int set1[], unsigned int set2[], int size1, int size2) {
+    int intersection = 0, union_size = 0;
+    int i, j;
+
+    // Calculate intersection
+    for (i = 0; i < size1; i++) {
+        for (j = 0; j < size2; j++) {
+            if (set1[i] >= set2[j] - TOLERANCE && set1[i] <= set2[j] + TOLERANCE) {
+                intersection++;
+                break;
+            }
+        }
+    }
+    union_size = size1 + size2 - intersection;
+    return (float) intersection / union_size;
 }
 
-float calculateSimilarity(VecteurImg vec1, VecteurImg vec2){
-    return 0.0f;
+int calculateSimilarity(VecteurImg* array,int nbElt, VecteurImg vec2){
+    float max_similarity = -1;
+    int most_similar_array_index = -1;
+
+    for (int i = 0; i < nbElt; i++) {
+        float similarity = jaccard_similarity(array[i].array, vec2.array, 12, 12);
+        printf("Similarity of %d : %f\n",i,similarity);
+        if (similarity > max_similarity) {
+            max_similarity = similarity;
+            most_similar_array_index = i;
+        }
+    }
+    if (max_similarity < MIN_THRESHOLD) {
+        return -1;
+    }
+    return most_similar_array_index;
 }
 
 /**
