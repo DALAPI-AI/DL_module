@@ -5,8 +5,6 @@
 #ifdef __linux__
 #include "process/comm.h"
 #endif
-#define NB_ACTIONS 4
-#define R_LOOP 1
 
 int actions[NB_ACTIONS] = {
     0b00, // STRAIGHT
@@ -150,7 +148,7 @@ int main(int argc, char const *argv[])
             sendMessage(fd,myMsg);
         }
     }
-    #endif */   
+    #endif
     return 0;
 }
 

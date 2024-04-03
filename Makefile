@@ -19,10 +19,13 @@ INCLUDE_DIR = ./include
 OBJ_DIR = bin
 OBJ_DELIMITER = /
 
-all: dalapi_AI
+all: dalapi_AI simulation
 
 dalapi_AI: creatDir model.o utils.o imageProcessing.o file.o $(EXTRA_FILE)
-	$(CC) $(wildcard $(OBJ_DIR)/*.o) -lm $(EXTRA_LIB) -o dalapi_AI
+	$(CC) $(filter-out $(OBJ_DIR)/simulation.o, $(wildcard $(OBJ_DIR)/*.o)) -lm $(EXTRA_LIB) -o dalapi_AI
+
+simulation: creatDir simulation.o imageProcessing.o utils.o
+	$(CC) $(filter-out $(OBJ_DIR)/model.o, $(wildcard $(OBJ_DIR)/*.o)) -lm $(EXTRA_LIB) -o simulation
 
 creatDir:
 	$(MKDIR) $(OBJ_DIR)
@@ -40,6 +43,9 @@ ifneq ($(OS),Windows_NT)
 comm.o : $(SRC_DIR)/process/comm.c
 	$(CC) $(FLAG) -c $< -o $(OBJ_DIR)$(OBJ_DELIMITER)$@
 endif
+
+simulation.o: $(SRC_DIR)/simulation/simulation.c
+	$(CC) $(FLAG) -c $< -o $(OBJ_DIR)$(OBJ_DELIMITER)$@
 
 
 file.o : $(SRC_DIR)/utils/file.c $(INCLUDE_DIR)/process/imageProcessing.h
