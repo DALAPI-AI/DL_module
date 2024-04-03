@@ -23,13 +23,25 @@ int sendMessage(int channel,char* msg){
 }
 
 
-int retrieveMessage(int channel,char* buffer){
-    char data = 'a';
-    int i=0;
-    int nb = 0;
-    while ((nb = serialDataAvail(channel)) > 0) {
+
+int retrieveMessage(int channel, char* buffer, int bufferSize) {
+    if (buffer == NULL || bufferSize < 15 || bufferSize > MAX_BUFFER_SIZE) {
+        return -1;
+    }
+
+    char data;
+    int i = 0;
+    int nb;
+
+    while (i < bufferSize - 1) {
+        if ((nb = serialDataAvail(channel)) <= 0) {
+            return 0; // No message received
+        }
+
         data = serialGetchar(channel);
-        if (data =='\n') break;
+        if (data == '\n') {
+            break;
+        }
         buffer[i++] = data;
     }
     buffer[i] = '\0';

@@ -117,13 +117,12 @@ int main(int argc, char const *argv[])
     int fd = configureSerial("/dev/ttyACM0",115200);
     
     char myMsg[5] = "G\n";
-    
+    char buffer[MAX_BUFFER_SIZE];
+    int bufSize = MAX_BUFFER_SIZE;
     int i=0;
     while (1)
     {
-        char buffer[900] = "";
-        int nByte = retrieveMessage(fd,buffer);
-        sleep(1);
+        int nByte = retrieveMessage(fd,buffer,bufSize);
 
         if (nByte != 0){
             // Treat data and give action
@@ -147,6 +146,7 @@ int main(int argc, char const *argv[])
             printf("j'ai recu %d %s\n",i++,buffer);
             sendMessage(fd,myMsg);
         }
+        sleep(1);
     }
     #endif
     return 0;

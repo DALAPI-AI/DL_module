@@ -11,6 +11,8 @@
 #define COMM_H
 #include <wiringPi.h>
 #include <wiringSerial.h>
+#define MAX_BUFFER_SIZE 100
+
 /**
  * @brief Configure the serial and return the file descriptor of the serial port
  * 
@@ -34,9 +36,10 @@ int sendMessage(int channel,char* msg);
  * 
  * @param channel serial port
  * @param buffer buffer to store the messsage
+ * @param bufferSize size of buffer
  * @return int nBytes read | -1 error
  */
-int retrieveMessage(int channel,char* buffer);
+int retrieveMessage(int channel, char* buffer, int bufferSize);
 
 
 
