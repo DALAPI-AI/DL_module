@@ -39,5 +39,6 @@ void afficherVect(VecteurImg vect);
 void generateNextState(VecteurImg *vect, int state, int action, Room room);
 void rotateVect(VecteurImg *vect, int newBoussole);
 int getNbRotation(int boussole, int newBoussole);
+VecteurImg getVectorFromArduino(char *message);
 
 #endif // IMAGE_PROCESS_H

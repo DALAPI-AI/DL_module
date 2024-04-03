@@ -549,6 +549,7 @@ int getNbRotation(int boussole, int newBoussole){
     return nbrot;
 }
 
+
 void rotateVect(VecteurImg *vect, int newBoussole){
     int distances[4] = {calculateNorthMean(*vect), getEast(*vect), getSouth(*vect), getWest(*vect)};
     int newdistances[4];
@@ -571,4 +572,34 @@ void rotateVect(VecteurImg *vect, int newBoussole){
     vect->array[9] = newdistances[2];
     vect->array[10] = newdistances[3];
     vect->array[11] = newBoussole;
+}
+
+int isNumber(char c){
+    return  c >= '0' && c <= '9';
+}
+
+/**
+ * @brief Construit le vecteur position à partir du message envoyé par l'arduino 
+ * @param message message envoyé par l'arduino avec le format {N1:N2:N3:N4:N5:N6:N7:N8:E:S:O:B}
+*/
+VecteurImg getVectorFromArduino(char *message){
+    VecteurImg vect;
+    int i = 0;
+    int capt = 0;
+    int nb = 0;
+    while(message[i] != '\0'){
+        if(isNumber(message[i])){
+            int asci = message[i] - '0';
+            nb = nb*10 + asci;
+        }else{
+            if(message[i] == ':' || message[i] == '}' ){
+                vect.array[capt] = nb;
+                capt ++;
+                nb = 0;
+            }
+        }
+        i++;
+    }
+
+    return vect;
 }

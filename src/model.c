@@ -60,7 +60,11 @@ int main(int argc, char const *argv[])
     afficherVect(vect);
     int nextState =  getState(vect, room);
 
-    
+    printf("#######################################################################\n");
+    char message[] = "{119:72:61:44:49:60:81:127:0:23:10:3}";
+    VecteurImg test = getVectorFromArduino(message);
+    afficherVect(test);
+     printf("#######################################################################\n");
     /*
      VecteurImg sampleVectors[] = {
         {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 1}},
@@ -151,7 +155,7 @@ int main(int argc, char const *argv[])
             sendMessage(fd,myMsg);
         }
     }
-    #endif    
+    #endif */   
     return 0;
 }
 
