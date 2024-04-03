@@ -2,7 +2,11 @@
 #include "utils/utils.h"
 #include "utils/file.h"
 #include "process/imageProcessing.h"
-
+#ifdef __linux__
+#include "process/comm.h"
+#endif
+#define NB_ACTIONS 4
+#define R_LOOP 1
 
 int actions[NB_ACTIONS] = {
     0b00, // STRAIGHT
@@ -37,7 +41,12 @@ int main(int argc, char const *argv[])
         }
     }
     printf("------------------------\n");
-   
+    VecteurImg sampleVectors[] = {
+        {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 1}},
+        {{130, 140, 150, 160, 200, 180, 130, 110, 10, 20, 30, 3}},
+        {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 2}}
+    };
+    int nbElt = 3;
     printf("#######################################################################\n");
     printf("\t\t Representation de vecteur \n");
     printf("#######################################################################\n");
@@ -67,7 +76,8 @@ int main(int argc, char const *argv[])
 
     printf("Affichage de tous les vecteurs:\n");
     VecteurImg* loadedVector = (VecteurImg*) malloc(nbElt*sizeof(VecteurImg));
-    if (loadVector(loadedVector, &nbElt,"vectors.txt") != 0) {
+    int loadEtat[3] = {0,0,0};
+    if (loadVector(loadedVector,loadEtat ,&nbElt,"vectors.txt") != 0) {
         printf("Error loading vector.\n");
         return 1;
     }
@@ -75,11 +85,13 @@ int main(int argc, char const *argv[])
         for (int j = 0; j < 12; j++) {
             printf("%u ", loadedVector[i].array[j]);
         }
-        printf("\n");
+        
+        printf("%d\n",loadEtat[i]);
     }
     VecteurImg newVector = {{250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360}};
+    int newEtat = 9;
     printf("Ajout d'un vecteur :\n");
-    if (appendVector(newVector, "vectors.txt") != 0) {
+    if (appendVector(newVector,newEtat, "vectors.txt") != 0) {
         printf("Error appending vector.\n");
         return 1;
     }
@@ -104,7 +116,42 @@ int main(int argc, char const *argv[])
     fclose(file);
 
     free(loadedVector);
-    */
+    #ifdef __linux__
+    int fd = configureSerial("/dev/ttyACM0",115200);
+    
+    char myMsg[5] = "G\n";
+    
+    int i=0;
+    while (1)
+    {
+        char buffer[900] = "";
+        int nByte = retrieveMessage(fd,buffer);
+        sleep(1);
+
+        if (nByte != 0){
+            // Treat data and give action
+            switch (rand()%4)
+            {
+            case 0:
+                myMsg[0] = 'H';
+                break;
+            case 1:
+                myMsg[0] = 'B';
+                break;
+            case 2:
+                myMsg[0] = 'G';
+                break;
+            case 3:
+                myMsg[0] = 'D';
+                break;
+            default:
+                break;
+            } 
+            printf("j'ai recu %d %s\n",i++,buffer);
+            sendMessage(fd,myMsg);
+        }
+    }
+    #endif    
     return 0;
 }
 
