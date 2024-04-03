@@ -7,7 +7,7 @@
 #include <math.h>
 
 #define DIM_CELL 30 // in centimeters 
-#define DIM_VECT 19 // 16(N) + 1(S) + 1(E) + 1(W) 
+
 #define MAIN_PROBALITY 0.50f
 #define EDGE_PROBALITY 0.25f
 
@@ -26,11 +26,6 @@ typedef struct {
     int nbStats;
     State **mat; // contenu de la case (numéro de la case)
 }Room;
-
-typedef struct {
-    // à voir avec les données dont on aurait besoin 
-    int vect[DIM_VECT];
-}Vecteur;
 
 
 // functions 

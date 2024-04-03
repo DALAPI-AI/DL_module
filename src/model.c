@@ -42,9 +42,9 @@ int main(int argc, char const *argv[])
 {
     srand(time(NULL));
 
-    int height = 3*180;
-    int width = 3*180;
-    int finalState = 3*18;
+    int height = 180;
+    int width = 180;
+    int finalState = 18;
     Room room = allocMemoireRoom(height, width);
 
     float ***T = allocMemoire3DimTab(room.nbStats, NB_ACTIONS);
@@ -84,7 +84,7 @@ int main(int argc, char const *argv[])
 
     } 
     
-    printf("-----------------Result------------------ \n");
+    printf("_____TEST RESULT _____\n");
     for(int s = 0; s < room.nbStats; s++){
         if ( s== finalState){
             printf("F ,");
@@ -96,14 +96,21 @@ int main(int argc, char const *argv[])
             printf("\n");
         }
     }
-    printf("---------------------------------\n");
+    printf("------------------------\n");
     VecteurImg sampleVectors[] = {
-        {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120}},
+        {{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 1}},
         {{130, 140, 150, 160, 200, 180, 130, 110, 10, 20, 30, 40}},
         {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}}
     };
     int nbElt = 3;
-    printf("Moyenne distance h' : %f\n",calculateNorthMean(sampleVectors[1]));
+    printf("#######################################################################\n");
+    printf("\t\t Representation de vecteur \n");
+    printf("#######################################################################\n");
+
+    VecteurImg vect = generateRandomVector(room);
+
+    int st = getState(vect, room);
+    
     /*
     if (saveVector(sampleVectors,nbElt ,"vectors.txt") != 0) {
         printf("Error saving vector.\n");
