@@ -141,7 +141,7 @@ float calculateNorthMean(VecteurImg vectImg){
         mean += oppose;
     }
     mean /= AMOUNT_NORTH;
-    printf("la valeur nord => %f\n ", mean);
+    //printf("la valeur nord => %f\n ", mean);
     return mean;
 }
 
@@ -181,24 +181,24 @@ void translateVect(VecteurImg vect, int* indexes){
     switch (bousole)
     {
     case 0:
-        printf("#### robot orienté vers le <NORD> ##\n");
+        //printf("#### robot orienté vers le <NORD> ##\n");
         break;
     case 2:
-        printf("#### robot orienté vers <EST> \n");
+        //printf("#### robot orienté vers <EST> \n");
         north = 3;
         est = 0;
         south = 1;
         west = 2;
         break;
     case 1:
-        printf("#### robot orienté vers le <SUD> \n");
+       // printf("#### robot orienté vers le <SUD> \n");
         north = 2;
         est = 3;
         south = 0;
         west = 1;
         break;
     case 3:
-        printf("#### robot orientéé vers <OUEST> \n");
+        //printf("#### robot orientéé vers <OUEST> \n");
         north = 1;
         est = 2;
         south = 3;
@@ -242,9 +242,9 @@ int getState(VecteurImg vect, Room room){
         printf("Erreur de calcule d'état \n");
         return -1;
     } 
-    printf("La ligne detecté => %d | La colonne detecté => %d \n", lig, col);
+    //printf("La ligne detecté => %d | La colonne detecté => %d \n", lig, col);
 
-    printf(" =====> état correspondant : %d\n",state);
+    //printf(" =====> état correspondant : %d\n",state);
 
     return state;
 }
@@ -317,7 +317,7 @@ VecteurImg generateRandomVector(Room room){
     int boussole = generateBoussole();
 
 
-    printf("Etat choisi : ligne => %d, colonne => %d, boussole => %d\n", line, col, boussole);
+    //printf("Etat choisi : ligne => %d, colonne => %d, boussole => %d\n", line, col, boussole);
 
     int northCel = 0;
     int westCel = 0;
@@ -366,7 +366,7 @@ VecteurImg generateRandomVector(Room room){
     vect.array[10] = randomDistance(westCel);
     vect.array[11] = boussole;
 
-    afficherVect(vect);
+    //afficherVect(vect);
     return vect;
 }
 
@@ -500,7 +500,7 @@ void generateNextState(VecteurImg *vect, int state, int action, Room room){
     }
 
     // TODO faire la translation avec la rotation d'abord 
-     printf("north step => %d, southStep => %d, estStep => %d, westStep => %d \n",northStep, southStep, estStep, westStep);
+     //printf("north step => %d, southStep => %d, estStep => %d, westStep => %d \n",northStep, southStep, estStep, westStep);
     for(int i = 0; i < AMOUNT_NORTH; i++){
         vect->array[i] += northStep + rand()%10;
     }
